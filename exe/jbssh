@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require "jbssh"
+Jbssh::CLI.start(ARGV)
