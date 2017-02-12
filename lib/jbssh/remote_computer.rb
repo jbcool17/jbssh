@@ -2,6 +2,7 @@ module Jbssh
   class RemoteComputer
     class << self
       def initialize_computers_db
+        `mkdir db`
         db = SQLite3::Database.new "db/jbssh.db"
         db.execute <<-SQL
           create table computers (
