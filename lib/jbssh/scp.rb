@@ -1,5 +1,3 @@
-require 'net/scp'
-
 module Jbssh
   class SCP
     def self.upload(ip, user, password, local_path, remote_path)

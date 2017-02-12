@@ -1,19 +1,5 @@
-require 'thor'
-
 module Jbssh
   class CLI < Thor
-    desc "example FILE", "an example task"
-    method_option :delete, :aliases => "-d", :desc => "Delete the file after parsing it"
-    def example(file)
-      puts "You supplied the file: #{file}"
-      delete_file = options[:delete]
-      if delete_file
-        puts "You specified that you would like to delete #{file}"
-      else
-        puts "You do not want to delete #{file}"
-      end
-    end
-
     desc "version | -v | --version", "version"
     def version
       puts "Name: #{Jbssh.name}"
@@ -24,21 +10,60 @@ module Jbssh
     map "--version" => 'version'
 
 
-    desc "ssh_command IP USER PASSWORD COMMAND", "connect to and run command via ssh"
-     method_option :command, :aliases => "-c", :desc => "run command"
-    def ssh_command(ip='192.168.56.110', user='vagrant', password='vagrant', command='ls')
-      command = options[:command] || command
-      Jbssh::SSH.connect_to ip, user, password, command
+    desc "com [COMPUTER-NAME] -c [COMMAND]", "connect to and run command via ssh"
+    method_option :command, :aliases => "-c", :desc => "command"
+    method_option :quiet, :aliases => "-q", :desc => "quiet"
+    def com(name)
+      command = options[:command]
+      computer = Jbssh::RemoteComputer.get_computer name
+
+      if options[:quiet]
+        Jbssh::SSH.run_command_quiet computer[:ip], computer[:user], computer[:password], command
+      else
+        Jbssh::SSH.run_command_loud computer[:ip], computer[:user], computer[:password], command
+      end
     end
 
-    desc "upload IP USER PASSWORD LOCAL_PATH REMOTE_PATH", "upload a local file"
-    def upload(ip='192.168.56.110', user='vagrant', password='vagrant', file='/Users/webdev/Projects/Practice/jbssh/testsrc.mov', remote_path='/home/vagrant')
-      Jbssh::SCP.upload ip, user, password, file, remote_path
+    desc "upload [COMPUTER-NAME] [LOCAL_PATH] [REMOTE_PATH]", "upload a local file"
+    method_option :remote_path, :aliases => "-r", :desc => "add remote_path"
+    method_option :local_path, :aliases => "-l", :desc => "add local_path"
+    def upload(name, local_path='/Users/webdev/Projects/Practice/jbssh/testsrc.mov', remote_path='/home/vagrant')
+      remote_path = options[:remote_path] || remote_path
+      local_path = options[:local_path] || local_path
+      computer = Jbssh::RemoteComputer.get_computer name
+
+      Jbssh::SCP.upload computer[:ip], computer[:user], computer[:password], local_path, remote_path
     end
 
-    desc "download IP USER PASSWORD REMOTE_PATH LOCAL_PATH", "download a remote file"
-    def download(ip='192.168.56.110', user='vagrant', password='vagrant', remote_path='/home/vagrant/testsrc.mov', local_path='/Users/webdev/Projects/Practice/jbssh/testsrc1.mov')
-      Jbssh::SCP.download ip, user, password, remote_path, local_path
+    desc "download [COMPUTER-NAME] [REMOTE_PATH] [LOCAL_PATH]", "download a remote file"
+    method_option :remote_path, :aliases => "-r", :desc => "add remote_path"
+    method_option :local_path, :aliases => "-l", :desc => "add local_path"
+    def download(name, remote_path='/home/vagrant/testsrc.mov', local_path="#{`pwd`}")
+      remote_path = options[:remote_path] || remote_path
+      local_path = options[:local_path] || local_path
+      computer = Jbssh::RemoteComputer.get_computer name
+
+      Jbssh::SCP.download computer[:ip], computer[:user], computer[:password], remote_path, local_path
+    end
+
+    desc "list", "list all computers"
+    def list
+      puts Jbssh::RemoteComputer.get_all_computers.collect { |k,v| "#{k}: #{v[:id]} | #{v[:ip]} | #{v[:user]}" }
+    end
+
+    desc "add [NAME] [IP] [USER] [PASSWORD]", "add computer"
+    def add(name, ip, user, password)
+      Jbssh::RemoteComputer.add_computer name, ip, user, password
+    end
+
+    desc "update [NAME] [FIELD] [NEW_VALUE]", "update computer"
+    def update(name, field, new_value)
+      Jbssh::RemoteComputer.update_computer name, field, new_value
+    end
+
+    desc "delete [NAME]", "delete computer"
+    def delete(name)
+      Jbssh::RemoteComputer.delete_computer name
     end
   end
 end
