@@ -1,8 +1,7 @@
 # Jbssh
+- Learning about Gems and CLI Applications
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/jbssh`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+CLI Utility for running commands on remote machines / downloading & uploading files via SSH/SCP
 
 ## Installation
 
@@ -22,7 +21,32 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add Computer & Run Commands
+```
+# store frequently used remote computers to the db
+$ jbssh add master 192.168.56.110 vagrant vagrant
+
+# Run command
+$ jbssh com master -c ls
+
+```
+
+```
+Name: Jbssh
+Version: 0.1.0
+Info: CLI Utility for running commands on remote machines / downloading & uploading files via SSH/SCP
+
+Commands:
+  jbssh add [NAME] [IP] [USER] [PASSWORD]                    # add computer
+  jbssh com [COMPUTER-NAME] -c [COMMAND]                     # connect to and run command via ssh
+  jbssh delete [NAME]                                        # delete computer
+  jbssh download [COMPUTER-NAME] [REMOTE_PATH] [LOCAL_PATH]  # download a remote file
+  jbssh help [COMMAND]                                       # Describe available commands or one specific command
+  jbssh list                                                 # list all computers
+  jbssh update [NAME] [FIELD] [NEW_VALUE]                    # update computer
+  jbssh upload [COMPUTER-NAME] [LOCAL_PATH] [REMOTE_PATH]    # upload a local file
+  jbssh version | -v | --version                             # version
+```
 
 ## Development
 
@@ -32,10 +56,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/jbssh.
+Bug reports and pull requests are welcome on GitHub at https://github.com/jbcool17/jbssh.
 
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
