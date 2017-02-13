@@ -5,28 +5,25 @@ CLI Utility for running commands on remote machines / downloading & uploading fi
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'jbssh'
-```
-
 And then execute:
 
     $ bundle
 
 Or install it yourself as:
 
-    $ gem install jbssh
+    $ rake build
+    $ rake install
 
 ## Usage
 
 Add Computer & Run Commands
 ```
 # store frequently used remote computers to the db
+            [NAME] [IP]           [USER]  [PASSWORD]  
 $ jbssh add master 192.168.56.110 vagrant vagrant
 
 # Run command
+            [NAME]    [COMMAND]
 $ jbssh com master -c ls
 
 ```
