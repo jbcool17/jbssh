@@ -5,9 +5,13 @@ CLI Utility for running commands on remote machines / downloading & uploading fi
 
 ## Installation
 
-And then execute:
+Install Dependencies:
 
     $ bundle
+
+Run Locally:
+
+    $ bundle exec jbssh
 
 Or install it yourself as:
 
