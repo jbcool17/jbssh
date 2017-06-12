@@ -65,5 +65,15 @@ module Jbssh
     def delete(name)
       Jbssh::RemoteComputer.delete_computer name
     end
+#------------------------------WIP-----------------------------------
+    desc "data", "data get"
+    def data(name, ip, user, pass)
+      Jbssh::Data.add_computer(name, ip, user, pass)
+    end
+
+    desc "data", "data get"
+    def data_list
+      Jbssh::Data.get_list
+    end
   end
 end
