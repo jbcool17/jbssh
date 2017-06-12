@@ -12,19 +12,22 @@ module Jbssh
             CSV.open(Jbssh.servers, "wb") do |csv|
               csv << ["name", "ip", "user", "password"]
             end
+            File.chmod(0700,Jbssh.servers)
             puts "File created..."
           end
         end
 
         def add_computer(name, ip, user, password)
-          if check_uniq(name)
+          nametest = name.to_s
+          if check_uniq(nametest)
             CSV.open(Jbssh.servers, "a+") do |csv|
-              csv << [name, ip, user, password]
+              csv << [nametest, ip, user, password]
             end
             puts "Computer has been added."
           else
             puts "Name is not unique."
           end
+
         end
 
         def remove_computer(name)
@@ -35,10 +38,10 @@ module Jbssh
           puts get_csv_hash
         end
 
-        private
-
         def check_uniq(name)
-          if get_csv_hash.collect { |a| a[:name] }.index(name).nil?
+          data = get_csv_hash
+
+          if data.collect { |a| a[:name] }.index(name).nil?
             return true
           end
 

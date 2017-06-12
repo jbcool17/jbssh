@@ -67,7 +67,11 @@ module Jbssh
     end
 #------------------------------WIP-----------------------------------
     desc "data", "data get"
-    def data(name, ip, user, pass)
+    def data
+      Jbssh::Data.initialize_computers_storage
+    end
+    desc "data_add", "data add"
+    def data_add(name, ip, user, pass)
       Jbssh::Data.add_computer(name, ip, user, pass)
     end
 
