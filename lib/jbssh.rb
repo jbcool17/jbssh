@@ -23,9 +23,4 @@ module Jbssh
   def self.servers
     "#{Jbssh.main_dir}/.jbssh/servers.csv"
   end
-  
-  # def self.logger
-  # @logger ||= Jbgit::Logger.new
-  # end
-
 end

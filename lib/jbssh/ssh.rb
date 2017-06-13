@@ -1,11 +1,7 @@
 module Jbssh
   class SSH
     def self.run_command_quiet(ip, user, command)
-      # Jbssh.message name, "Connecting to #{ip}...".blue
-
       Net::SSH.start(ip, user) do |ssh|
-        # Jbssh.message name, "Logged in to #{ssh.exec!('hostname')}".strip.blue
-        # Jbssh.message name, "Running command: #{command}".strip.blue
         channel = ssh.open_channel do |ch|
           ch.exec command do |ch, success|
             raise "could not execute command" unless success
@@ -22,7 +18,6 @@ module Jbssh
           end
         end
         channel.wait
-        # Jbssh.message name, "Logging out of #{ssh.exec!('hostname')}".strip.blue
       end
     end
 
@@ -31,6 +26,7 @@ module Jbssh
         Jbssh.message name, "Logged in to #{ssh.exec!('hostname')}".strip.blue
         channel = ssh.open_channel do |ch|
           Jbssh.message name, "Running command: #{command}".strip.blue
+          ch.request_pty
           ch.exec command do |ch, success|
             raise "could not execute command" unless success
 
@@ -44,8 +40,12 @@ module Jbssh
               $stderr.print data
             end
 
-            # ch.on_close { puts "done!" }
           end
+          ch.wait
+          # loop until ctrl-C is pressed
+          # int_pressed = false
+          # trap("INT") { int_pressed = true }
+          # ssh.loop(0.1) { not int_pressed }
         end
         channel.wait
         Jbssh.message name, "Logging out of #{ssh.exec!('hostname')}".strip.blue

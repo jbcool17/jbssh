@@ -56,10 +56,7 @@ module Jbssh
         end
 
         def check_uniq(name)
-          data = get_csv_hash
-
-          data.each do |r|
-
+          get_csv_hash.each do |r|
             return false if "#{r[:name]}" == name
           end
 
@@ -68,9 +65,8 @@ module Jbssh
 
         def get_csv_hash
           data = CSV.read(Jbssh.servers,  { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all})
-          hashed_data = data.map { |d| d.to_hash }
-
-          hashed_data
+          
+          data.map { |d| d.to_hash }
         end
     end
   end
