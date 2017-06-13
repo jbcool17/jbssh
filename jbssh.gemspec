@@ -39,6 +39,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency "ruby-progressbar"
   spec.add_dependency "colorize"
   spec.add_dependency "thor"
-  spec.add_dependency "sqlite3"
-  # spec.add.dependency "pg"
 end
