@@ -48,6 +48,8 @@ Commands:
   jbssh upload [COMPUTER-NAME] [LOCAL_PATH] [REMOTE_PATH]    # upload a local file
   jbssh version | -v | --version                             # version
 ```
+### Notes
+- setup store solution
 
 ## Development
 

@@ -17,11 +17,17 @@ module Jbssh
           end
         end
 
+        def get_computer(name)
+          table = CSV.table(Jbssh.servers)
+
+          table.select { |row| "#{row[:name]}" == "#{name}" }
+        end
+
         def add_computer(name, ip, user, password)
-          nametest = name.to_s
-          if check_uniq(nametest)
+
+          if check_uniq("#{name}")
             CSV.open(Jbssh.servers, "a+") do |csv|
-              csv << [nametest, ip, user, password]
+              csv << ["#{name}", ip, user, password]
             end
             puts "Computer has been added."
           else
@@ -30,22 +36,33 @@ module Jbssh
 
         end
 
-        def remove_computer(name)
-          puts "Computer has been deleted."
+        def delete(name)
+          table = CSV.table(Jbssh.servers)
+
+          table.delete_if do |row|
+            "#{row[:name]}" == "#{name}"
+          end
+
+          File.open(Jbssh.servers, 'w') do |f|
+            f.write(table.to_csv)
+          end
+
+          puts "#{name} has been deleted."
         end
 
         def get_list
-          puts get_csv_hash
+          get_csv_hash
         end
 
         def check_uniq(name)
           data = get_csv_hash
 
-          if data.collect { |a| a[:name] }.index(name).nil?
-            return true
+          data.each do |r|
+
+            return false if "#{r[:name]}" == name
           end
 
-          false
+          true
         end
 
         def get_csv_hash

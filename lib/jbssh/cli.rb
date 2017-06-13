@@ -15,12 +15,12 @@ module Jbssh
     method_option :quiet, :aliases => "-q", :desc => "quiet"
     def com(name)
       command = options[:command]
-      computer = Jbssh::RemoteComputer.get_computer name
-
+      computer = Jbssh::Data.get_computer name
+      puts computer[0][1]
       if options[:quiet]
-        Jbssh::SSH.run_command_quiet computer[:ip], computer[:user], computer[:password], command
+        Jbssh::SSH.run_command_quiet computer[0][1], computer[0][2], computer[0][3], command
       else
-        Jbssh::SSH.run_command_loud computer[:ip], computer[:user], computer[:password], command
+        Jbssh::SSH.run_command_loud computer[0][1], computer[0][2], computer[0][3], command
       end
     end
 
@@ -46,38 +46,29 @@ module Jbssh
       Jbssh::SCP.download computer[:ip], computer[:user], computer[:password], remote_path, local_path
     end
 
+    desc "init", "initialize config & storage"
+    def init
+      Jbssh::Data.initialize_computers_storage
+    end
+
     desc "list", "list all computers"
     def list
-      puts Jbssh::RemoteComputer.get_all_computers.collect { |k,v| "#{k}: #{v[:id]} | #{v[:ip]} | #{v[:user]}" }
+      Jbssh::Data.get_list.each { |r| puts r }
     end
 
     desc "add [NAME] [IP] [USER] [PASSWORD]", "add computer"
     def add(name, ip, user, password)
-      Jbssh::RemoteComputer.add_computer name, ip, user, password
+      Jbssh::Data.add_computer(name, ip, user, password)
     end
 
     desc "update [NAME] [FIELD] [NEW_VALUE]", "update computer"
     def update(name, field, new_value)
-      Jbssh::RemoteComputer.update_computer name, field, new_value
+      puts "Needs Implementation."
     end
 
     desc "delete [NAME]", "delete computer"
     def delete(name)
-      Jbssh::RemoteComputer.delete_computer name
-    end
-#------------------------------WIP-----------------------------------
-    desc "data", "data get"
-    def data
-      Jbssh::Data.initialize_computers_storage
-    end
-    desc "data_add", "data add"
-    def data_add(name, ip, user, pass)
-      Jbssh::Data.add_computer(name, ip, user, pass)
-    end
-
-    desc "data", "data get"
-    def data_list
-      Jbssh::Data.get_list
+      Jbssh::Data.delete(name)
     end
   end
 end
