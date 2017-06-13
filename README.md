@@ -1,8 +1,7 @@
 # Jbssh
 - Learning about Gems and CLI Applications
-- this gem is not secure, stores passwords as clear text, working on it
 
-CLI Utility for running commands on remote machines / downloading & uploading files via SSH/SCP
+CLI Utility for running commands on remote machines via SSH
 
 ## Installation
 
@@ -21,38 +20,40 @@ Or install it yourself as:
 
 ## Usage
 
-Add Computer & Run Commands
+Initialize, Add Computer & Run Commands
 ```
+# Initialize config - this command setups .jbssh folder in your home directory
+$ jbssh init
+
 # store frequently used remote computers to the db
-            [NAME] [IP]           [USER]  [PASSWORD]  
-$ jbssh add master 192.168.56.110 vagrant vagrant
+            [NAME] [IP]           [USER]   
+$ jbssh add master 192.168.56.110 vagrant
 
 # Run command
             [NAME]    [COMMAND]
 $ jbssh com master -c ls
+$ jbssh com master -c 'ls -lah'
 
 ```
 
 ```
 Name: Jbssh
-Version: 0.1.0
+Version: 0.2.0
 Info: CLI Utility for running commands on remote machines / downloading & uploading files via SSH/SCP
 
 Commands:
+  jbssh init                                                 # add computer
   jbssh add [NAME] [IP] [USER]                               # add computer
   jbssh com [COMPUTER-NAME] -c [COMMAND]                     # connect to and run command via ssh
   jbssh delete [NAME]                                        # delete computer
-  jbssh download [COMPUTER-NAME] [REMOTE_PATH] [LOCAL_PATH]  # download a remote file
   jbssh help [COMMAND]                                       # Describe available commands or one specific command
   jbssh list                                                 # list all computers
   jbssh update [NAME] [FIELD] [NEW_VALUE]                    # update computer
-  jbssh upload [COMPUTER-NAME] [LOCAL_PATH] [REMOTE_PATH]    # upload a local file
   jbssh version | -v | --version                             # version
 ```
 
 ### Notes/TODO
-- setup store solution
-- remove password - set function to setup keys
+- create .pub key copy / install public key
 
 ## Development
 
