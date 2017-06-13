@@ -27,6 +27,7 @@ module Jbssh
 
           if check_uniq("#{name}")
             CSV.open(Jbssh.servers, "a+") do |csv|
+              # bcrypt for pass store
               csv << ["#{name}", ip, user, password]
             end
             puts "Computer has been added."
