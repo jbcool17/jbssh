@@ -1,5 +1,6 @@
 # Jbssh
 - Learning about Gems and CLI Applications
+- this gem is not secure, stores passwords as clear text, working on it
 
 CLI Utility for running commands on remote machines / downloading & uploading files via SSH/SCP
 
@@ -38,7 +39,7 @@ Version: 0.1.0
 Info: CLI Utility for running commands on remote machines / downloading & uploading files via SSH/SCP
 
 Commands:
-  jbssh add [NAME] [IP] [USER] [PASSWORD]                    # add computer
+  jbssh add [NAME] [IP] [USER]                               # add computer
   jbssh com [COMPUTER-NAME] -c [COMMAND]                     # connect to and run command via ssh
   jbssh delete [NAME]                                        # delete computer
   jbssh download [COMPUTER-NAME] [REMOTE_PATH] [LOCAL_PATH]  # download a remote file
@@ -48,8 +49,10 @@ Commands:
   jbssh upload [COMPUTER-NAME] [LOCAL_PATH] [REMOTE_PATH]    # upload a local file
   jbssh version | -v | --version                             # version
 ```
-### Notes
+
+### Notes/TODO
 - setup store solution
+- remove password - set function to setup keys
 
 ## Development
 

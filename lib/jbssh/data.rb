@@ -10,7 +10,7 @@ module Jbssh
 
           if !File.exists? Jbssh.servers
             CSV.open(Jbssh.servers, "wb") do |csv|
-              csv << ["name", "ip", "user", "password"]
+              csv << ["name", "ip", "user"]
             end
             File.chmod(0700,Jbssh.servers)
             puts "File created..."
@@ -23,12 +23,12 @@ module Jbssh
           table.select { |row| "#{row[:name]}" == "#{name}" }
         end
 
-        def add_computer(name, ip, user, password)
+        def add_computer(name, ip, user)
 
           if check_uniq("#{name}")
             CSV.open(Jbssh.servers, "a+") do |csv|
               # bcrypt for pass store
-              csv << ["#{name}", ip, user, password]
+              csv << ["#{name}", ip, user]
             end
             puts "Computer has been added."
           else

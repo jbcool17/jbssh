@@ -18,9 +18,9 @@ module Jbssh
       computer = Jbssh::Data.get_computer name
       puts computer[0][1]
       if options[:quiet]
-        Jbssh::SSH.run_command_quiet computer[0][1], computer[0][2], computer[0][3], command
+        Jbssh::SSH.run_command_quiet computer[0][1], computer[0][2], command
       else
-        Jbssh::SSH.run_command_loud computer[0][1], computer[0][2], computer[0][3], command
+        Jbssh::SSH.run_command_loud computer[0][1], computer[0][2], command
       end
     end
 
@@ -32,7 +32,7 @@ module Jbssh
       local_path = options[:local_path] || local_path
       computer = Jbssh::RemoteComputer.get_computer name
 
-      Jbssh::SCP.upload computer[:ip], computer[:user], computer[:password], local_path, remote_path
+      Jbssh::SCP.upload computer[:ip], computer[:user], local_path, remote_path
     end
 
     desc "download [COMPUTER-NAME] [REMOTE_PATH] [LOCAL_PATH]", "download a remote file"
@@ -43,7 +43,7 @@ module Jbssh
       local_path = options[:local_path] || local_path
       computer = Jbssh::RemoteComputer.get_computer name
 
-      Jbssh::SCP.download computer[:ip], computer[:user], computer[:password], remote_path, local_path
+      Jbssh::SCP.download computer[:ip], computer[:user], remote_path, local_path
     end
 
     desc "init", "initialize config & storage"
@@ -56,9 +56,9 @@ module Jbssh
       Jbssh::Data.get_list.each { |r| puts r }
     end
 
-    desc "add [NAME] [IP] [USER] [PASSWORD]", "add computer"
-    def add(name, ip, user, password)
-      Jbssh::Data.add_computer(name, ip, user, password)
+    desc "add [NAME] [IP] [USER]", "add computer"
+    def add(name, ip, user)
+      Jbssh::Data.add_computer(name, ip, user)
     end
 
     desc "update [NAME] [FIELD] [NEW_VALUE]", "update computer"
