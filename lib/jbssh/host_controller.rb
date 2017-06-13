@@ -1,5 +1,5 @@
 module Jbssh
-  class Data
+  class HostController
       class << self
         def initialize_computers_storage
           data_dir = "#{Jbssh.main_dir}/.jbssh"

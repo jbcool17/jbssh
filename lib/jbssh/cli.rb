@@ -9,14 +9,12 @@ module Jbssh
     map "-v" => 'version'
     map "--version" => 'version'
 
-
     desc "com [COMPUTER-NAME] -c [COMMAND]", "connect to and run command via ssh"
     method_option :command, :aliases => "-c", :desc => "command"
     method_option :quiet, :aliases => "-q", :desc => "quiet"
     def com(name)
       command = options[:command]
-      computer = Jbssh::Data.get_computer name
-      puts computer[0][1]
+      computer = Jbssh::HostController.get_computer name
       if options[:quiet]
         Jbssh::SSH.run_command_quiet computer[0][1], computer[0][2], command
       else
@@ -24,41 +22,19 @@ module Jbssh
       end
     end
 
-    desc "upload [COMPUTER-NAME] [LOCAL_PATH] [REMOTE_PATH]", "upload a local file"
-    method_option :remote_path, :aliases => "-r", :desc => "add remote_path"
-    method_option :local_path, :aliases => "-l", :desc => "add local_path"
-    def upload(name, local_path='/Users/webdev/Projects/Practice/jbssh/testsrc.mov', remote_path='/home/vagrant')
-      remote_path = options[:remote_path] || remote_path
-      local_path = options[:local_path] || local_path
-      computer = Jbssh::RemoteComputer.get_computer name
-
-      Jbssh::SCP.upload computer[:ip], computer[:user], local_path, remote_path
-    end
-
-    desc "download [COMPUTER-NAME] [REMOTE_PATH] [LOCAL_PATH]", "download a remote file"
-    method_option :remote_path, :aliases => "-r", :desc => "add remote_path"
-    method_option :local_path, :aliases => "-l", :desc => "add local_path"
-    def download(name, remote_path='/home/vagrant/testsrc.mov', local_path="#{`pwd`}")
-      remote_path = options[:remote_path] || remote_path
-      local_path = options[:local_path] || local_path
-      computer = Jbssh::RemoteComputer.get_computer name
-
-      Jbssh::SCP.download computer[:ip], computer[:user], remote_path, local_path
-    end
-
     desc "init", "initialize config & storage"
     def init
-      Jbssh::Data.initialize_computers_storage
+      Jbssh::HostController.initialize_computers_storage
     end
 
     desc "list", "list all computers"
     def list
-      Jbssh::Data.get_list.each { |r| puts r }
+      Jbssh::HostController.get_list.each { |r| puts r }
     end
 
     desc "add [NAME] [IP] [USER]", "add computer"
     def add(name, ip, user)
-      Jbssh::Data.add_computer(name, ip, user)
+      Jbssh::HostController.add_computer(name, ip, user)
     end
 
     desc "update [NAME] [FIELD] [NEW_VALUE]", "update computer"
@@ -68,7 +44,7 @@ module Jbssh
 
     desc "delete [NAME]", "delete computer"
     def delete(name)
-      Jbssh::Data.delete(name)
+      Jbssh::HostController.delete(name)
     end
   end
 end
